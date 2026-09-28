@@ -9,3 +9,10 @@
 # Local Node dependencies and logs
 node_modules/
 npm-debug.log*
+
+# Local agent and Devpost skill-pack files; planning artifacts live in /devpost
+/.agents/
+/.claude/
+/agent/
+/skills-lock.json
+/codex-session-*.md
