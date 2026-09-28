@@ -19,7 +19,7 @@ Build mode: fast
   Learner check: Open `http://localhost:3000`, choose **Try Demo Packet**, and check whether the source links make the supported payment and uncertain/missing delivery understandable.
   Commit: `Build live demo evidence analysis`
 
-- [ ] **2. Upload and review a controlled evidence set**
+- [x] **2. Upload and review a controlled evidence set**
   Becomes usable: A user can select up to five supported files, review filename/type/size, remove a file, and analyze the remaining set through the same AI and analysis experience as the demo.
   Why now: It extends the already-working evidence-to-analysis path with the second PRD entry route and original-source access, without introducing file libraries, accounts, or storage.
   PRD ref: `prd.md > The Core Journey` (steps 3–5), `prd.md > Entry and Evidence Selection`, `prd.md > Analysis and Evidence Timeline`.

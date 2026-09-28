@@ -32,9 +32,9 @@
             <button id="tryDemoButton" class="button button-primary" type="button">
               <span>Try Demo Packet</span><span class="button-arrow" aria-hidden="true">→</span>
             </button>
-            <button id="uploadButton" class="button button-secondary" type="button" disabled aria-describedby="uploadNextNote">Upload Evidence <span class="coming-soon">Next slice</span></button>
+            <button id="uploadButton" class="button button-secondary" type="button">Upload Evidence <span class="button-arrow" aria-hidden="true">↑</span></button>
           </div>
-          <p id="uploadNextNote" class="minor-note">File upload is being added after the demo path.</p>
+          <p class="minor-note">Up to five files · TXT, PDF, PNG, or JPEG · 2 MB each</p>
           <div class="trust-note">
             <span class="trust-icon" aria-hidden="true">i</span>
             <p>ProofPath organizes evidence and identifies uncertainty. It does not determine who is right, provide legal advice, or establish legal truth.</p>
@@ -62,14 +62,40 @@
       </section>
     </section>
 
+    <section id="uploadView" class="upload-view" hidden aria-labelledby="uploadHeading">
+      <button id="uploadBackButton" class="text-button back-button" type="button"><span aria-hidden="true">←</span> Back to ProofPath</button>
+      <div class="upload-header">
+        <p class="eyebrow">Private, in-memory review</p>
+        <h1 id="uploadHeading">Choose the records to review.</h1>
+        <p class="upload-description">Add up to five files. Check their names and sizes, then analyze the readable evidence together.</p>
+      </div>
+      <input id="evidencePicker" class="visually-hidden" type="file" accept=".txt,.pdf,.png,.jpg,.jpeg,text/plain,application/pdf,image/png,image/jpeg" multiple>
+      <div class="upload-toolbar">
+        <p><strong id="selectedCount">0 files selected</strong><span> · Up to 2 MB per file, 10 MB total</span></p>
+        <button id="addFilesButton" class="button button-secondary button-small" type="button">Add files</button>
+      </div>
+      <div id="uploadEmpty" class="upload-empty">
+        <span class="empty-file-icon" aria-hidden="true">＋</span>
+        <strong>No evidence selected yet</strong>
+        <p>Choose messages, receipts, screenshots, or documents to begin.</p>
+        <button id="chooseFilesButton" class="button button-secondary button-small" type="button">Choose files</button>
+      </div>
+      <ul id="reviewFileList" class="review-file-list" aria-label="Selected evidence files"></ul>
+      <div id="uploadNotice" class="upload-notice" role="status" aria-live="polite" hidden></div>
+      <div class="upload-actions">
+        <p>Files stay in this browser session and are sent to Google Gemini for analysis. Use fictional or non-sensitive evidence.</p>
+        <button id="analyzeButton" class="button button-primary" type="button" disabled>Analyze Evidence <span class="button-arrow" aria-hidden="true">→</span></button>
+      </div>
+    </section>
+
     <section id="analysisView" class="analysis-view" hidden aria-labelledby="analysisTitle">
       <button id="backButton" class="text-button back-button" type="button"><span aria-hidden="true">←</span> Back to ProofPath</button>
       <div class="analysis-header">
         <div>
-          <p class="eyebrow">Fictional online purchase · Evidence review</p>
+          <p id="analysisEyebrow" class="eyebrow">Fictional online purchase · Evidence review</p>
           <h1 id="analysisTitle">Your evidence, in order.</h1>
         </div>
-        <span class="sample-badge"><span aria-hidden="true">✳</span> Synthetic demo</span>
+        <span id="analysisBadge" class="sample-badge"><span aria-hidden="true">✳</span> Synthetic demo</span>
       </div>
 
       <div id="processingPanel" class="processing-panel" role="status" aria-live="polite" hidden>
@@ -77,6 +103,7 @@
       </div>
       <div id="analysisError" class="error-panel" role="alert" hidden>
         <div class="error-icon" aria-hidden="true">!</div><div class="error-copy"><strong id="errorTitle">Analysis could not finish</strong><p id="errorMessage"></p></div>
+        <button id="reviewFilesButton" class="button button-secondary button-small" type="button">Review files</button>
         <button id="retryButton" class="button button-secondary button-small" type="button">Retry analysis</button>
       </div>
       <div id="analysisContent" hidden>
@@ -101,7 +128,7 @@
               <div id="contradictionList"></div>
             </section>
             <section class="source-list-card" aria-labelledby="sourcesHeading">
-              <div class="source-list-heading"><div><p class="section-kicker">Available to inspect</p><h2 id="sourcesHeading">Original evidence</h2></div><span class="source-count">5 files</span></div>
+              <div class="source-list-heading"><div><p class="section-kicker">Available to inspect</p><h2 id="sourcesHeading">Original evidence</h2></div><span id="sourceCount" class="source-count">5 files</span></div>
               <div id="sourceList" class="source-list"></div>
             </section>
           </aside>
