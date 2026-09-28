@@ -375,8 +375,22 @@ async function callGemini(files) {
   if (response.status === 401 || response.status === 403) {
     throw apiError(503, 'AI_KEY_INVALID', SAFE_ERROR_MESSAGES.AI_KEY_INVALID);
   }
+  if (response.status === 400) {
+    let providerMessage = '';
+    try {
+      providerMessage = String((await response.json()).error?.message || '').toLowerCase();
+    } catch {
+      // Keep provider response details private and use the generic safe error below.
+    }
+    if (providerMessage.includes('api key not valid') || providerMessage.includes('invalid api key')) {
+      throw apiError(503, 'AI_KEY_INVALID', SAFE_ERROR_MESSAGES.AI_KEY_INVALID);
+    }
+  }
   if (response.status === 429) throw apiError(503, 'AI_RATE_LIMITED', SAFE_ERROR_MESSAGES.AI_RATE_LIMITED);
-  if (!response.ok) throw apiError(502, 'AI_UNAVAILABLE', SAFE_ERROR_MESSAGES.AI_UNAVAILABLE);
+  if (!response.ok) {
+    console.error(`[ProofPath] Gemini returned HTTP ${response.status}`);
+    throw apiError(502, 'AI_UNAVAILABLE', SAFE_ERROR_MESSAGES.AI_UNAVAILABLE);
+  }
 
   let result;
   try {

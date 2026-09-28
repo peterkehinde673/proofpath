@@ -192,6 +192,32 @@ h1 { margin: 0; color: var(--ink); font-size: clamp(2.6rem, 5.1vw, 4.65rem); fon
 .source-file-name { min-width: 0; overflow: hidden; color: #344f52; font-size: .7rem; font-weight: 650; text-overflow: ellipsis; white-space: nowrap; }
 .source-details { border-top: 1px solid #ebefeb; padding: 10px; color: #52686b; font-size: .72rem; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
 .analysis-disclaimer { margin-top: 25px; border-top: 1px solid var(--line); padding-top: 16px; color: #768783; font-size: .72rem; line-height: 1.6; }
+.analysis-actions { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 22px; border-top: 1px solid var(--line); padding-top: 18px; }
+.analysis-actions p { margin: 0; color: var(--muted); font-size: .75rem; }
+.report-view { width: min(860px, 100%); margin: 0 auto; padding: 34px 0 78px; }
+.report-sheet { border: 1px solid #dce4df; border-radius: 15px; background: #fff; padding: clamp(24px, 5vw, 56px); box-shadow: var(--shadow); }
+.report-topline { display: flex; justify-content: space-between; gap: 16px; border-bottom: 1px solid #e5ebe6; padding-bottom: 14px; color: #84928e; font-size: .63rem; font-weight: 750; letter-spacing: .1em; }
+.report-sheet > .eyebrow { margin-top: 29px; }
+.report-sheet h1 { font-size: clamp(2.2rem, 4.5vw, 3.4rem); }
+.report-body { margin-top: 28px; }
+.report-section { margin-top: 26px; border-top: 1px solid #e9eeea; padding-top: 19px; }
+.report-section h2 { margin: 0 0 13px; font-size: 1.02rem; letter-spacing: -.02em; }
+.report-section > p { margin: 0; color: #4f6668; font-size: .83rem; line-height: 1.7; }
+.report-event { border: 1px solid #e3e9e4; border-radius: 10px; margin-top: 10px; padding: 14px; }
+.report-event-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.report-event-date { color: var(--muted); font-size: .7rem; font-weight: 700; }
+.report-event h3 { margin: 10px 0 5px; font-size: .88rem; }
+.report-event > p,.report-source p,.report-gap p { margin: 0; color: var(--muted); font-size: .76rem; line-height: 1.6; }
+.report-source { margin-top: 10px; border-left: 2px solid #c7ded4; padding-left: 10px; }
+.report-source strong { color: #395b58; font-size: .7rem; }
+.report-source blockquote { margin: 5px 0; color: #465e63; font-size: .74rem; line-height: 1.55; }
+.report-gap { border-top: 1px solid #edf0ec; margin-top: 10px; padding-top: 10px; }
+.report-gap strong { font-size: .78rem; }
+.report-gap .report-muted { margin-top: 5px; }
+.report-muted { color: #778782 !important; font-size: .75rem !important; line-height: 1.55; }
+.report-scope-note { margin-top: 30px; border: 1px solid #d8e6df; border-radius: 10px; background: #f4f8f5; padding: 15px; }
+.report-scope-note strong { font-size: .75rem; }
+.report-scope-note p { margin: 5px 0 0; color: #657974; font-size: .72rem; line-height: 1.6; }
 
 @media (max-width: 900px) {
   .hero-grid { grid-template-columns: minmax(0,1fr) minmax(310px,.9fr); gap: 36px; }
@@ -211,6 +237,7 @@ h1 { margin: 0; color: var(--ink); font-size: clamp(2.6rem, 5.1vw, 4.65rem); fon
   .site-footer { flex-direction: column; gap: 4px; padding: 17px 20px; }
   .analysis-view { padding-top: 24px; }
   .upload-view { padding-top: 24px; }
+  .report-view { padding-top: 24px; }
   .analysis-header { align-items: flex-start; flex-direction: column; }
   .analysis-columns { grid-template-columns: 1fr; }
   .evidence-aside { grid-template-columns: 1fr 1fr; }
@@ -231,6 +258,9 @@ h1 { margin: 0; color: var(--ink); font-size: clamp(2.6rem, 5.1vw, 4.65rem); fon
   .event-meta { align-items: flex-start; flex-direction: column-reverse; gap: 5px; }
   .error-panel { align-items: flex-start; flex-wrap: wrap; }
   .error-panel .button { margin-left: 39px; }
+  .analysis-actions { align-items: stretch; flex-direction: column; }
+  .analysis-actions .button { width: 100%; }
+  .report-topline { flex-direction: column; gap: 4px; }
   .upload-toolbar { align-items: flex-start; }
   .upload-actions { align-items: stretch; flex-direction: column; }
   .upload-actions .button { width: 100%; }

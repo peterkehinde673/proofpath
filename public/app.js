@@ -11,6 +11,7 @@ const elements = {
   landing: document.querySelector('#landingView'),
   upload: document.querySelector('#uploadView'),
   analysis: document.querySelector('#analysisView'),
+  report: document.querySelector('#reportView'),
   demoButton: document.querySelector('#tryDemoButton'),
   uploadButton: document.querySelector('#uploadButton'),
   uploadBackButton: document.querySelector('#uploadBackButton'),
@@ -32,6 +33,11 @@ const elements = {
   errorMessage: document.querySelector('#errorMessage'),
   retryButton: document.querySelector('#retryButton'),
   reviewFilesButton: document.querySelector('#reviewFilesButton'),
+  viewReportButton: document.querySelector('#viewReportButton'),
+  reportBackButton: document.querySelector('#reportBackButton'),
+  reportHeading: document.querySelector('#reportHeading'),
+  reportDate: document.querySelector('#reportDate'),
+  reportBody: document.querySelector('#reportBody'),
   content: document.querySelector('#analysisContent'),
   summary: document.querySelector('#caseSummary'),
   fileIssues: document.querySelector('#fileIssues'),
@@ -93,6 +99,7 @@ function showLandingMessage(message, kind = 'info', retry = false) {
 function showAnalysisView() {
   elements.landing.hidden = true;
   elements.upload.hidden = true;
+  elements.report.hidden = true;
   elements.analysis.hidden = false;
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -100,9 +107,21 @@ function showAnalysisView() {
 function showLandingView() {
   elements.analysis.hidden = true;
   elements.upload.hidden = true;
+  elements.report.hidden = true;
   elements.landing.hidden = false;
   window.scrollTo({ top: 0, behavior: 'smooth' });
   elements.demoButton.focus();
+}
+
+function showReportView() {
+  if (!state.analysis) return;
+  renderReport(state.analysis);
+  elements.landing.hidden = true;
+  elements.upload.hidden = true;
+  elements.analysis.hidden = true;
+  elements.report.hidden = false;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  elements.reportHeading.focus();
 }
 
 async function loadDemoFiles() {
@@ -404,7 +423,7 @@ function renderSources(files, fileIssues = []) {
     const detailsContent = document.createElement('div');
     detailsContent.className = 'source-details';
     detailsContent.append(createElement('p', '', issue?.reason || file.text || 'Original file retained in this browser session.'));
-    if (file.sourceUrl && !issue) {
+    if (file.sourceUrl) {
       const openOriginal = createElement('a', '', 'Open original file');
       openOriginal.href = file.sourceUrl;
       openOriginal.target = '_blank';
@@ -442,6 +461,64 @@ function renderAnalysis(analysis) {
   elements.content.hidden = false;
 }
 
+function reportSection(title, className = '') {
+  const section = createElement('section', `report-section${className ? ` ${className}` : ''}`);
+  section.append(createElement('h2', '', title));
+  return section;
+}
+
+function renderReport(analysis) {
+  const filesById = sourceMap();
+  elements.reportBody.replaceChildren();
+  elements.reportDate.textContent = `Prepared ${new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(new Date())}`;
+
+  const overview = reportSection('Case summary');
+  overview.append(createElement('p', '', analysis.summary));
+  elements.reportBody.append(overview);
+
+  const timeline = reportSection('Chronological evidence');
+  const events = [...analysis.events].sort((a, b) => (a.date || '9999').localeCompare(b.date || '9999'));
+  if (!events.length) timeline.append(createElement('p', 'report-muted', 'No events could be established from the readable files.'));
+  for (const event of events) {
+    const item = createElement('article', 'report-event');
+    const top = createElement('div', 'report-event-top');
+    top.append(createElement('span', 'report-event-date', event.date || 'Date not stated'));
+    top.append(createElement('span', `status-pill ${event.status}`, event.status[0].toUpperCase() + event.status.slice(1)));
+    item.append(top, createElement('h3', '', event.event), createElement('p', '', event.why));
+    for (const source of event.evidence || []) {
+      const file = filesById.get(source.fileId);
+      if (!file) continue;
+      const evidence = createElement('div', 'report-source');
+      evidence.append(createElement('strong', '', file.name));
+      evidence.append(createElement('blockquote', '', `“${source.excerpt}”`));
+      evidence.append(createElement('p', '', source.detail));
+      item.append(evidence);
+    }
+    timeline.append(item);
+  }
+  elements.reportBody.append(timeline);
+
+  const gaps = reportSection('Missing evidence');
+  if (!analysis.missingEvidence.length) gaps.append(createElement('p', 'report-muted', 'No additional missing evidence was identified in this set.'));
+  for (const gap of analysis.missingEvidence) {
+    const item = createElement('div', 'report-gap');
+    item.append(createElement('strong', '', gap.event), createElement('p', '', gap.needed));
+    gaps.append(item);
+  }
+  elements.reportBody.append(gaps);
+
+  const contradictions = reportSection('Contradictions');
+  if (!analysis.contradictions.length) contradictions.append(createElement('p', 'report-muted', 'No contradiction was detected in the submitted files.'));
+  for (const conflict of analysis.contradictions) {
+    const item = createElement('div', 'report-gap');
+    item.append(createElement('strong', '', conflict.claim), createElement('p', '', conflict.explanation));
+    const sources = createElement('p', 'report-muted', (conflict.evidence || []).map((source) => filesById.get(source.fileId)?.name).filter(Boolean).join(' · '));
+    item.append(sources);
+    contradictions.append(item);
+  }
+  elements.reportBody.append(contradictions);
+}
+
 elements.demoButton.addEventListener('click', startDemo);
 elements.uploadButton.addEventListener('click', beginUploadSelection);
 elements.addFilesButton.addEventListener('click', () => elements.picker.click());
@@ -462,6 +539,8 @@ elements.analyzeButton.addEventListener('click', () => {
   runAnalysis();
 });
 elements.reviewFilesButton.addEventListener('click', showUploadView);
+elements.viewReportButton.addEventListener('click', showReportView);
+elements.reportBackButton.addEventListener('click', showAnalysisView);
 elements.backButton.addEventListener('click', showLandingView);
 elements.retryButton.addEventListener('click', runAnalysis);
 checkService();

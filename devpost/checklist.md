@@ -29,7 +29,7 @@ Build mode: fast
   Learner check: Upload one of the included fictional text records, review/remove it, then analyze the remaining valid set and open its source from the timeline.
   Commit: `Add controlled evidence upload flow`
 
-- [ ] **3. Finish recovery states, report, responsive polish, and README**
+- [x] **3. Finish recovery states, report, responsive polish, and README**
   Becomes usable: The complete POC has a readable report from the same validated analysis, clear retry/replacement behavior for real failures, a calm responsive interface, setup/data instructions, and an end-to-end demo walkthrough.
   Why now: The kernel and both entry paths are already working, so this slice adds the remaining promised outputs and finishes the experience without expanding the architecture.
   PRD ref: `prd.md > Evidence Report`, `prd.md > States and Boundaries`, `prd.md > Look and Feel`, `prd.md > What We're Building`.
@@ -42,11 +42,11 @@ Build mode: fast
 ## Hands-on Checkpoints
 
 - [x] Early usable behavior explored — user confirmed live Gemini analysis works; payment event is clearly source-linked, delivery uncertainty/missing evidence is clear.
-- [ ] Final kick-the-tires exploration and feedback completed — after slice 3, walk the core flow and awkward inputs before final review.
+- [x] Final kick-the-tires exploration and feedback completed — user confirmed upload, remove/add, source, report, invalid-file, and narrow-screen flows work and are understandable; no blocking issues.
 
 ## Final Review
 
-- [ ] Final review complete — feedback resolved and learner confirms ready to ship
+- [x] Final review complete — no blocking issues reported; user instructed to commit slice 3 and continue through 6-ship.
 
 ## Code Tour and App Map
 
