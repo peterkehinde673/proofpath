@@ -4,6 +4,8 @@
 
 ProofPath helps organize and compare records. It does not determine who is right, provide legal advice, or establish legal truth.
 
+ProofPath is licensed under the MIT License. See [LICENSE](LICENSE).
+
 ## Try the demo
 
 Requirements: Node.js 22.21 or newer, a Gemini API key from [Google AI Studio](https://aistudio.google.com/app/apikey), and network access to the Gemini API.

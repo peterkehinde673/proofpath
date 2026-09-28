@@ -19,7 +19,7 @@ This is a factual checklist, not a drafted Devpost entry. The participant writes
 
 ## Repository
 
-- [ ] Choose an open-source license and include its license file. The current event rules say the public repository should include a license visible at the top of the repository page.
+- [x] MIT License added at the repository root. The current event rules say the public repository should include a license visible at the top of the repository page.
 - [ ] Obtain approval before creating a public repository or pushing commits.
 - [ ] Confirm the public repository includes source, assets, README, and the planning files `devpost/scope.md`, `devpost/prd.md`, and `devpost/spec.md`.
 - [ ] Confirm `.env`, `.env.*` (except `.env.example`), and `devpost/learner-profile.md` are not published.
