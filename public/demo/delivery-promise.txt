@@ -1,0 +1,7 @@
+FICTIONAL DEMO EVIDENCE — Delivery estimate
+Merchant: Orbit Audio
+Order: NP-1048
+Message sent: 2026-06-19 11:04 WAT
+
+Seller message:
+"Your order is packed. Our estimate is delivery on or before 2026-06-25. I will send the courier tracking details when it is dispatched."

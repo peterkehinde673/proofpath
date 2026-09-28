@@ -1,0 +1,9 @@
+FICTIONAL DEMO EVIDENCE — Order confirmation and receipt
+Merchant: Orbit Audio
+Order number: NP-1048
+Order date: 2026-06-18
+Item: 1 × Orbit Wave headset
+Total paid: NGN 25,000.00
+Buyer: Maya Okafor
+Payment reference: CP-DEMO-771204
+Order status: Confirmed

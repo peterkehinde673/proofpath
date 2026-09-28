@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>ProofPath · Technical spec review</title>
+  <style>
+    :root { color-scheme:light; --ink:#172c35; --muted:#536a72; --paper:#f5f7f3; --card:#fff; --line:#cbd7d4; --teal:#116a68; --soft:#e7f2ef; --gold:#f1c66e; --red:#a3483b; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif; }
+    main { width:min(1080px,calc(100% - 32px)); margin:40px auto 72px; }
+    h1,h2,h3,p { margin-top:0; }
+    h1 { max-width:800px; font-size:clamp(2rem,5vw,3.5rem); line-height:1.04; letter-spacing:-.04em; margin:.55rem 0 1rem; }
+    h2 { font-size:1.28rem; margin-bottom:.45rem; }
+    h3 { font-size:1rem; margin-bottom:.25rem; }
+    .eyebrow { color:var(--teal); text-transform:uppercase; letter-spacing:.12em; font-size:.75rem; font-weight:750; }
+    .lede,.muted { max-width:760px; color:var(--muted); }
+    .panel { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:clamp(20px,4vw,32px); margin-top:22px; box-shadow:0 8px 28px #1934320b; }
+    .diagram { margin-top:18px; overflow:hidden; border:1px solid var(--line); border-radius:14px; background:#fbfdfb; padding:12px; }
+    svg { display:block; width:100%; height:auto; }
+    svg .box { fill:#fff; stroke:#b8cbc6; stroke-width:2; }
+    svg .browser { fill:#e7f2ef; stroke:#87b4aa; }
+    svg .api { fill:#172c35; stroke:#172c35; }
+    svg .provider { fill:#fff5dc; stroke:#dfc477; }
+    svg .arrow { fill:none; stroke:#116a68; stroke-width:3; marker-end:url(#arrow); }
+    svg text { fill:#172c35; font:600 15px system-ui,sans-serif; }
+    svg .small { fill:#536a72; font:12px system-ui,sans-serif; }
+    svg .inverse { fill:#fff; }
+    .mobile-diagram { display:none; }
+    .flow { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:16px; }
+    details { background:#fff; border:1px solid var(--line); border-radius:13px; padding:15px 17px; }
+    summary { cursor:pointer; font-weight:750; }
+    details p { color:var(--muted); margin:.65rem 0 0; }
+    code { background:#edf2ef; border-radius:5px; padding:.1em .32em; overflow-wrap:anywhere; }
+    pre { overflow:auto; background:#f2f6f3; border:1px solid var(--line); border-radius:12px; padding:16px; font-size:.86rem; line-height:1.45; }
+    .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:16px; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:13px; padding:16px; }
+    .card p { color:var(--muted); margin:.4rem 0 0; font-size:.92rem; }
+    .callout { border-left:4px solid var(--gold); padding:14px 17px; background:#fff9eb; border-radius:0 12px 12px 0; }
+    .callout p { margin:0; }
+    .warning { border-left-color:var(--red); background:#fff6f3; }
+    a { color:#075f5c; }
+    footer { color:var(--muted); font-size:.85rem; margin:24px 4px 0; }
+    @media(max-width:720px) {
+      main { margin-top:24px; }
+      .flow,.grid { grid-template-columns:1fr; }
+      .desktop-diagram { display:none; }
+      .mobile-diagram { display:block; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">Build With AI · Technical specification · Draft</div>
+    <h1>A small local app, one live AI request, and no case database.</h1>
+    <p class="lede">The PRD said what ProofPath should do. This blueprint shows where each part lives, how evidence moves through the analysis, and how the project stays small enough to build and demonstrate.</p>
+  </header>
+
+  <section class="panel" aria-labelledby="architecture-title">
+    <div class="eyebrow">Architecture and data flow</div>
+    <h2 id="architecture-title">The API key stays on the local server</h2>
+    <p class="muted">Browser code is visible to people who open the page, so the secret key lives in an ignored local <code>.env</code> file and is read only by Node. The server checks the files, asks Gemini for structured analysis, checks its source references, and returns the result to the browser.</p>
+    <div class="diagram desktop-diagram">
+      <svg viewBox="0 0 1040 350" role="img" aria-labelledby="flow-title flow-desc">
+        <title id="flow-title">ProofPath evidence data flow</title>
+        <desc id="flow-desc">Selected or demo evidence goes from the browser to a local Node server. The server validates files and keeps the API key, then sends the evidence to Gemini. Gemini's JSON result returns to the server for validation before the browser displays the timeline, original source details, and report. Uploads and results are not saved by ProofPath.</desc>
+        <defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#116a68"/></marker></defs>
+        <rect class="box browser" x="20" y="104" width="230" height="122" rx="16"/>
+        <text x="135" y="136" text-anchor="middle">Browser workspace</text><text class="small" x="135" y="164" text-anchor="middle">demo or selected files</text><text class="small" x="135" y="187" text-anchor="middle">review → timeline → report</text>
+        <rect class="box api" x="400" y="70" width="250" height="190" rx="16"/>
+        <text class="inverse" x="525" y="108" text-anchor="middle">Local Node server</text><text class="small inverse" x="525" y="139" text-anchor="middle">validate file limits and source IDs</text><text class="small inverse" x="525" y="162" text-anchor="middle">keep secret key in .env</text><text class="small inverse" x="525" y="198" text-anchor="middle">validate JSON; no disk/database</text>
+        <rect class="box provider" x="800" y="104" width="220" height="122" rx="16"/>
+        <text x="910" y="136" text-anchor="middle">Gemini API</text><text class="small" x="910" y="164" text-anchor="middle">one structured analysis</text><text class="small" x="910" y="187" text-anchor="middle">text · image · PDF</text>
+        <path class="arrow" d="M250 142 L394 142"/><text class="small" x="322" y="128" text-anchor="middle">files</text>
+        <path class="arrow" d="M650 142 L794 142"/><text class="small" x="722" y="128" text-anchor="middle">prompt + evidence</text>
+        <path class="arrow" d="M800 204 C760 300 300 300 250 204"/><text class="small" x="524" y="292" text-anchor="middle">validated result back to browser</text>
+        <text class="small" x="524" y="332" text-anchor="middle">Uploaded files and results stay in memory while the page is open.</text>
+      </svg>
+    </div>
+    <div class="mobile-diagram">
+      <div class="card"><strong>Browser workspace</strong><p>Demo or selected files; review, timeline, report.</p></div>
+      <div class="card"><strong>↓ Local Node server</strong><p>Checks types and sizes, keeps the API key in <code>.env</code>, validates source IDs, and does not save uploads.</p></div>
+      <div class="card"><strong>↓ Gemini API</strong><p>One structured analysis request for text, image, and PDF evidence.</p></div>
+      <div class="card"><strong>↩ Validated result</strong><p>Returns to the browser as timeline, evidence details, and report.</p></div>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="journey-title">
+    <div class="eyebrow">Step through the build path</div>
+    <h2 id="journey-title">One result powers the timeline and report</h2>
+    <div class="flow">
+      <details open><summary>1 · Start with demo or upload</summary><p><strong>Files:</strong> <code>public/index.html</code>, <code>public/app.js</code>, <code>public/demo/*.txt</code>. Demo opens the analysis after its live request; uploads show a review list first.</p><p><strong>PRD:</strong> Entry and Evidence Selection.</p></details>
+      <details><summary>2 · Check and send evidence</summary><p><strong>File:</strong> <code>server.mjs</code>. Allow up to five files, 2 MB each, 10 MB total, using TXT, PDF, PNG, or JPG. Reject unsupported or obviously invalid inputs and continue with remaining valid files when possible.</p><p><strong>PRD:</strong> Entry and Evidence Selection; States and Boundaries.</p></details>
+      <details><summary>3 · Ask Gemini once</summary><p><strong>Service:</strong> Gemini 3.1 Flash-Lite. A focused instruction and evidence parts request summary, dated events, direct source IDs/details, uncertain/missing items, and contradictions. JSON schema controls shape; it does not prove factual correctness.</p><p><strong>PRD:</strong> Analysis and Evidence Timeline.</p></details>
+      <details><summary>4 · Validate before display</summary><p><strong>File:</strong> <code>server.mjs</code>. Check JSON shape, submitted file IDs, source requirements for Supported events, and at least two distinct sources for any contradiction. An invalid result becomes a retryable error.</p><p><strong>PRD:</strong> Analysis and Evidence Timeline; States and Boundaries.</p></details>
+      <details><summary>5 · Show analysis and original sources</summary><p><strong>Files:</strong> <code>public/app.js</code>, <code>public/styles.css</code>. Render a calm, chronological workspace with accessible text labels for all evidence statuses. Original evidence is opened from the same in-memory file set.</p><p><strong>PRD:</strong> Analysis and Evidence Timeline; Look and Feel.</p></details>
+      <details><summary>6 · Open report from same result</summary><p><strong>File:</strong> <code>public/app.js</code>. Render a neutral report from the validated result object; do not make a second model call.</p><p><strong>PRD:</strong> Evidence Report.</p></details>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="tree-title">
+    <div class="eyebrow">Where the pieces live</div>
+    <h2 id="tree-title">A short project tree</h2>
+    <pre><code>proofpath/
+├── server.mjs                 # Static server + Gemini analysis endpoint
+├── package.json               # One start command; no packages
+├── .env.example               # Empty key placeholder
+├── .gitignore                 # Secrets and private learner profile
+├── README.md                  # Setup, data notice, demo instructions
+├── public/
+│   ├── index.html             # One app shell and view regions
+│   ├── styles.css             # Responsive workspace styling
+│   ├── app.js                 # Upload, navigation, results, report
+│   └── demo/                  # Five fictional evidence text files
+└── devpost/                   # Approved scope/PRD and this spec</code></pre>
+  </section>
+
+  <section class="panel" aria-labelledby="tradeoff-title">
+    <div class="eyebrow">Keep it small</div>
+    <h2 id="tradeoff-title">Tradeoffs and boundaries</h2>
+    <div class="grid">
+      <div class="card"><h3>Minimal setup</h3><p>Plain browser code and Node's built-ins; no framework, database, account system, or deployment requirement.</p></div>
+      <div class="card"><h3>Real AI in the demo</h3><p>The synthetic packet uses the same live analysis route as uploads. The tradeoff is a required API key and internet connection.</p></div>
+      <div class="card"><h3>Small controlled inputs</h3><p>Five files max, fixed extensions and size limits. Other formats get a clear unsupported message.</p></div>
+      <div class="card"><h3>Ephemeral data</h3><p>Files/results disappear on refresh or close. No account or saved-case feature is introduced.</p></div>
+      <div class="card"><h3>Source checks, not truth checks</h3><p>The server verifies IDs and required citation fields; the reviewer can inspect the original. AI output can still be wrong.</p></div>
+      <div class="card"><h3>Local demo is enough</h3><p>Record the required short video from <code>http://localhost:3000</code>; deployment remains optional.</p></div>
+    </div>
+    <div class="callout warning" style="margin-top:16px"><p><strong>Data notice:</strong> Evidence is sent to Gemini for analysis. On the free tier, Google may use submitted content to improve its products. The landing/upload views and README must tell people to use fictional, non-sensitive evidence only.</p></div>
+  </section>
+  <footer>Canonical technical plan: <code>spec.md</code>. This visual companion is standalone and works without a build step or network connection.</footer>
+</main>
+</body>
+</html>

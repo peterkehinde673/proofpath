@@ -1,0 +1,9 @@
+FICTIONAL DEMO EVIDENCE — Payment confirmation
+Payment provider: CedarPay Demo
+Status: Successful
+Payer: Maya Okafor
+Payee: Orbit Audio
+Amount: NGN 25,000.00
+Date and time: 2026-06-18 09:29 WAT
+Reference: CP-DEMO-771204
+This record is synthetic and does not represent a real transaction.

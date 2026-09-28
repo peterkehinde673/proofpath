@@ -1,0 +1,11 @@
+FICTIONAL DEMO EVIDENCE — Seller conversation
+Platform: Northstar Market
+Order: NP-1048
+Buyer: Maya Okafor
+Seller: Orbit Audio
+
+2026-06-18 09:12 — Buyer: Hello, is the Orbit Wave headset in stock?
+2026-06-18 09:18 — Seller: Yes, one is available. I can reserve it for you.
+2026-06-18 09:31 — Buyer: Please reserve one. I have paid using the checkout details.
+2026-06-18 09:36 — Seller: I can see the order. Thanks; I will confirm dispatch shortly.
+2026-06-26 14:42 — Seller: The courier status now says delivered at 14:32 today.

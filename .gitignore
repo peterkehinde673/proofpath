@@ -1,0 +1,11 @@
+# Devpost Learn personal learning context
+/devpost/learner-profile.md
+
+# Local credentials
+.env
+.env.*
+!.env.example
+
+# Local Node dependencies and logs
+node_modules/
+npm-debug.log*

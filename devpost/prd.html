@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>ProofPath · PRD review</title>
+  <style>
+    :root { color-scheme:light; --ink:#172c35; --muted:#536a72; --paper:#f5f7f3; --card:#fff; --line:#cbd7d4; --teal:#116a68; --soft:#e7f2ef; --gold:#f1c66e; --red:#a3483b; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif; }
+    main { width:min(1080px,calc(100% - 32px)); margin:40px auto 72px; }
+    h1,h2,h3,p { margin-top:0; }
+    h1 { max-width:780px; font-size:clamp(2rem,5vw,3.5rem); line-height:1.04; letter-spacing:-.04em; margin:.55rem 0 1rem; }
+    h2 { font-size:1.3rem; margin-bottom:.45rem; }
+    h3 { font-size:1rem; margin-bottom:.3rem; }
+    .eyebrow { color:var(--teal); text-transform:uppercase; letter-spacing:.12em; font-size:.75rem; font-weight:750; }
+    .lede { max-width:760px; color:var(--muted); font-size:1.08rem; }
+    .panel { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:clamp(20px,4vw,32px); margin-top:22px; box-shadow:0 8px 28px #1934320b; }
+    .callout { padding:16px 18px; border-left:4px solid var(--gold); background:#fff9eb; border-radius:0 12px 12px 0; color:#4f4a3d; }
+    .callout p { margin:0; }
+    .diagram { margin-top:18px; overflow:hidden; border:1px solid var(--line); border-radius:14px; background:#fbfdfb; padding:10px; }
+    svg { display:block; width:100%; height:auto; }
+    svg .box { fill:#fff; stroke:#b8cbc6; stroke-width:2; }
+    svg .entry { fill:#e7f2ef; stroke:#87b4aa; }
+    svg .analysis { fill:#172c35; stroke:#172c35; }
+    svg .report { fill:#fff5dc; stroke:#dfc477; }
+    svg .path { fill:none; stroke:#116a68; stroke-width:3; marker-end:url(#arrow); }
+    svg .dashed { stroke-dasharray:7 7; }
+    svg text { fill:#172c35; font:600 16px system-ui,sans-serif; }
+    svg .small { fill:#536a72; font:13px system-ui,sans-serif; }
+    svg .inverse { fill:#fff; }
+    .mobile-flow { display:none; }
+    .branch { margin:8px 0; padding:12px 14px; border:1px solid var(--line); border-radius:12px; background:#fff; }
+    .branch b { color:var(--teal); }
+    .readout { color:var(--muted); margin:.45rem 0 0; }
+    .steps { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:16px; }
+    details { background:#fff; border:1px solid var(--line); border-radius:13px; padding:15px 17px; }
+    summary { cursor:pointer; font-weight:750; }
+    details p { color:var(--muted); margin:.65rem 0 0; }
+    ul { padding-left:1.2rem; margin:.55rem 0 0; }
+    li { margin:.35rem 0; }
+    .tag { display:inline-block; font-size:.78rem; background:var(--soft); color:#165c59; padding:3px 8px; border-radius:999px; margin-right:5px; }
+    .status-row { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:16px 0; }
+    .status { border:1px solid var(--line); border-radius:12px; padding:14px; background:#fff; }
+    .status strong { display:block; margin-bottom:4px; }
+    .status.supported { border-top:4px solid var(--teal); }
+    .status.uncertain { border-top:4px solid #c9902d; }
+    .status.missing { border-top:4px solid var(--red); }
+    .source { border:1px solid var(--line); border-radius:12px; padding:15px 17px; background:#f8fbfa; margin-top:12px; }
+    footer { color:var(--muted); font-size:.85rem; margin:24px 4px 0; }
+    @media(max-width:700px) {
+      main { margin-top:24px; }
+      .steps,.status-row { grid-template-columns:1fr; }
+      .desktop-diagram { display:none; }
+      .mobile-flow { display:block; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">Build With AI · Product requirements · Draft</div>
+    <h1>One clear path from scattered evidence to a verifiable story.</h1>
+    <p class="lede">The scope named the small experiment. This PRD makes the user journey, evidence rules, and failure recovery concrete enough to build and check.</p>
+  </header>
+
+  <section class="panel" aria-labelledby="journey-title">
+    <div class="eyebrow">Two entries, one analysis</div>
+    <h2 id="journey-title">The complete user journey</h2>
+    <div class="diagram desktop-diagram">
+      <svg viewBox="0 0 1000 340" role="img" aria-labelledby="diagram-title diagram-desc">
+        <title id="diagram-title">ProofPath journey</title>
+        <desc id="diagram-desc">The landing screen branches to a demo packet that opens analysis, or an upload review followed by analysis. Both paths converge on analysis and then the evidence report. Original evidence can be opened from analysis.</desc>
+        <defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#116a68"/></marker></defs>
+        <rect class="box entry" x="20" y="126" width="155" height="80" rx="14"/>
+        <text x="97" y="157" text-anchor="middle">Landing</text><text class="small" x="97" y="181" text-anchor="middle">Demo or upload</text>
+        <rect class="box" x="250" y="42" width="164" height="72" rx="14"/>
+        <text x="332" y="73" text-anchor="middle">Demo packet</text><text class="small" x="332" y="96" text-anchor="middle">finished analysis</text>
+        <rect class="box" x="250" y="222" width="164" height="72" rx="14"/>
+        <text x="332" y="253" text-anchor="middle">Upload review</text><text class="small" x="332" y="276" text-anchor="middle">files · remove · analyze</text>
+        <rect class="box analysis" x="495" y="126" width="180" height="80" rx="14"/>
+        <text class="inverse" x="585" y="157" text-anchor="middle">Analysis</text><text class="small inverse" x="585" y="181" text-anchor="middle">timeline · statuses · gaps</text>
+        <rect class="box report" x="770" y="126" width="190" height="80" rx="14"/>
+        <text x="865" y="157" text-anchor="middle">Evidence report</text><text class="small" x="865" y="181" text-anchor="middle">neutral · source-linked</text>
+        <path class="path" d="M175 144 C205 144 214 78 245 78"/>
+        <path class="path" d="M175 188 C205 188 214 258 245 258"/>
+        <path class="path" d="M414 78 C455 78 450 150 490 150"/>
+        <path class="path" d="M414 258 C455 258 450 182 490 182"/>
+        <path class="path" d="M675 166 L765 166"/>
+        <path class="path dashed" d="M585 206 C585 306 865 306 865 211"/>
+        <text class="small" x="724" y="299" text-anchor="middle">original files available from analysis</text>
+      </svg>
+    </div>
+    <div class="mobile-flow" aria-label="Journey for small screens">
+      <div class="branch"><b>Landing</b> · choose demo or upload</div>
+      <div class="branch"><b>Demo path</b> · Try Demo Packet → finished analysis</div>
+      <div class="branch"><b>Upload path</b> · Select files → review/remove → Analyze Evidence → analysis</div>
+      <div class="branch"><b>Shared analysis</b> · Summary → source-linked timeline → status and gaps → report. Original files stay accessible.</div>
+    </div>
+    <div class="steps">
+      <details open><summary>Try Demo Packet</summary><p>Open the completed fictional purchase analysis immediately; the user does not need to inspect source files first. The analysis keeps an action to view those originals.</p><p><span class="tag">Check</span> Demo opens the same analysis structure as uploads and exposes its source files.</p></details>
+      <details><summary>Upload and review</summary><p>Select a small supported set. Show each filename, type, and basic file information, allow removal/replacement, and require an explicit Analyze Evidence action. No folders or case management.</p><p><span class="tag">Check</span> The list reflects selected files; removing a file updates it; an empty or invalid set explains what to fix.</p></details>
+      <details><summary>Processing and recovery</summary><p>Show a lightweight processing state. For a failure, identify the file/reason when known, preserve the selection, allow remove/replace/retry, and keep successfully processed evidence available. If the service is unavailable, offer Retry analysis.</p><p><span class="tag">Check</span> No failure path silently drops files or shows invented extracted evidence/statuses.</p></details>
+      <details><summary>Analysis view</summary><p>Show a short case summary, chronological timeline, source file per event, extracted detail, Supported / Uncertain / Missing state, concise Missing Evidence, and contradictions only when evidence conflicts. Original files and report are accessible here.</p><p><span class="tag">Check</span> Each Supported event links to direct source evidence; ordering is chronological; no contradiction is shown for a mere gap.</p></details>
+      <details><summary>Evidence report</summary><p>Present the same source-grounded summary, events, statuses, relevant contradictions, and missing evidence in readable neutral language. Include the role/limits note.</p><p><span class="tag">Check</span> The report never turns an uncertain or missing claim into a fact and is available after successful analysis.</p></details>
+      <details><summary>Empty and invalid states</summary><p>When no valid files remain, explain that at least one supported file is needed. Identify invalid/unsupported items and offer removal or replacement; do not begin analysis with an empty set.</p><p><span class="tag">Check</span> The user can recover without returning to the start of the flow.</p></details>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="evidence-title">
+    <div class="eyebrow">Evidence rules</div>
+    <h2 id="evidence-title">Status describes the submitted records</h2>
+    <p class="readout">Every timeline event follows: <strong>Event → Status → Source evidence → Extracted supporting detail.</strong> Never infer a fact because it seems plausible or follows logically from another event.</p>
+    <div class="status-row">
+      <div class="status supported"><strong>Supported</strong>Direct support in one or more files; cite the file and relevant text, date, amount, or detail.</div>
+      <div class="status uncertain"><strong>Uncertain</strong>Relevant indication exists but is ambiguous, incomplete, or in conflict.</div>
+      <div class="status missing"><strong>Missing</strong>The files do not establish the event; identify evidence that could help verify it.</div>
+    </div>
+    <div class="callout"><p><strong>Contradictions:</strong> compare explicit details across sources and flag incompatible claims only. A missing delivery receipt alone is a gap, not proof of a contradiction. The product organizes evidence; it does not establish legal truth.</p></div>
+  </section>
+
+  <section class="panel" aria-labelledby="gut-title">
+    <div class="eyebrow">Scope gut check</div>
+    <h2 id="gut-title">Complete enough to demonstrate; constrained enough to build</h2>
+    <div class="steps">
+      <div><h3>What is sharp</h3><p class="readout">The two entry routes converge on a single source-grounded result, with one memorable delivery-uncertainty example. Status definitions and failure recovery prevent the AI from making the evidence look more complete than it is.</p></div>
+      <div><h3>What stays soft for the spec</h3><p class="readout">Exact file formats, count/size limits, and whether the demo uses live analysis need to be chosen in the technical spec. Keeping those limits small is essential to the 2–4 hour target; no broad parsing or case-management layer belongs in this build.</p></div>
+    </div>
+  </section>
+  <footer>Canonical requirements are in <code>prd.md</code>. The approved scope remains the project boundary.</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f6f2">
+  <meta name="description" content="ProofPath turns scattered evidence into a clear, verifiable story.">
+  <title>ProofPath · Evidence, in order</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="ProofPath home">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M7 7h13l5 5v13H7z"/><path d="M20 7v6h5M11 17h10M11 21h7"/><path d="m18 25 2.2 2.2L25 22.5"/></svg></span>
+      <span>ProofPath</span>
+    </a>
+    <div id="serviceStatus" class="service-status" role="status" aria-live="polite">
+      <span class="status-dot" aria-hidden="true"></span><span id="serviceStatusText">Checking analysis setup…</span>
+    </div>
+  </header>
+
+  <main id="main">
+    <section id="landingView" class="landing-view">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">A calmer way to make sense of the record</p>
+          <h1>Turn scattered evidence into a clear, verifiable story.</h1>
+          <p class="hero-description">Upload a small set of messages, receipts, screenshots, or documents. ProofPath organizes them into a sourced timeline, highlights uncertainty, and shows what evidence is still missing.</p>
+          <div class="hero-actions">
+            <button id="tryDemoButton" class="button button-primary" type="button">
+              <span>Try Demo Packet</span><span class="button-arrow" aria-hidden="true">→</span>
+            </button>
+            <button id="uploadButton" class="button button-secondary" type="button" disabled aria-describedby="uploadNextNote">Upload Evidence <span class="coming-soon">Next slice</span></button>
+          </div>
+          <p id="uploadNextNote" class="minor-note">File upload is being added after the demo path.</p>
+          <div class="trust-note">
+            <span class="trust-icon" aria-hidden="true">i</span>
+            <p>ProofPath organizes evidence and identifies uncertainty. It does not determine who is right, provide legal advice, or establish legal truth.</p>
+          </div>
+          <p class="privacy-note">This demo uses fictional records. Files sent for analysis go to Google Gemini; do not upload sensitive or real case documents.</p>
+        </div>
+
+        <aside class="preview-card" aria-label="ProofPath output preview">
+          <div class="preview-heading"><span class="preview-label">The evidence path</span><span class="preview-count">01 — 04</span></div>
+          <ol class="preview-flow">
+            <li><span class="flow-number">01</span><span class="flow-icon" aria-hidden="true">▤</span><span class="flow-copy"><strong>Evidence</strong><small>Messages, receipts, records</small></span><span class="flow-check" aria-hidden="true">✓</span></li>
+            <li><span class="flow-number">02</span><span class="flow-icon" aria-hidden="true">↕</span><span class="flow-copy"><strong>Timeline</strong><small>Events in date order</small></span><span class="flow-check" aria-hidden="true">✓</span></li>
+            <li><span class="flow-number">03</span><span class="flow-icon" aria-hidden="true">◉</span><span class="flow-copy"><strong>Evidence status</strong><small>Supported · Uncertain · Missing</small></span><span class="flow-check" aria-hidden="true">✓</span></li>
+            <li><span class="flow-number">04</span><span class="flow-icon" aria-hidden="true">≡</span><span class="flow-copy"><strong>Report</strong><small>A clear, source-linked account</small></span><span class="flow-check" aria-hidden="true">✓</span></li>
+          </ol>
+          <div class="preview-foot"><span class="preview-spark" aria-hidden="true">✳</span><span>A record you can follow back to its source.</span></div>
+        </aside>
+      </div>
+
+      <div id="messageRegion" class="message-region" role="status" aria-live="polite" hidden></div>
+
+      <section class="demo-context" aria-label="Fictional demo packet details">
+        <div><span class="section-kicker">The demo</span><h2>One online purchase. Five records. One unresolved question.</h2></div>
+        <p>A buyer has a seller conversation, payment confirmation, order receipt, delivery estimate, and a follow-up where delivery has not been clearly confirmed.</p>
+      </section>
+    </section>
+
+    <section id="analysisView" class="analysis-view" hidden aria-labelledby="analysisTitle">
+      <button id="backButton" class="text-button back-button" type="button"><span aria-hidden="true">←</span> Back to ProofPath</button>
+      <div class="analysis-header">
+        <div>
+          <p class="eyebrow">Fictional online purchase · Evidence review</p>
+          <h1 id="analysisTitle">Your evidence, in order.</h1>
+        </div>
+        <span class="sample-badge"><span aria-hidden="true">✳</span> Synthetic demo</span>
+      </div>
+
+      <div id="processingPanel" class="processing-panel" role="status" aria-live="polite" hidden>
+        <span class="spinner" aria-hidden="true"></span><div><strong>Reading the evidence</strong><p>Connecting dates and claims to their source files…</p></div>
+      </div>
+      <div id="analysisError" class="error-panel" role="alert" hidden>
+        <div class="error-icon" aria-hidden="true">!</div><div class="error-copy"><strong id="errorTitle">Analysis could not finish</strong><p id="errorMessage"></p></div>
+        <button id="retryButton" class="button button-secondary button-small" type="button">Retry analysis</button>
+      </div>
+      <div id="analysisContent" hidden>
+        <section class="summary-card" aria-labelledby="summaryHeading">
+          <div class="summary-label"><span class="summary-mark" aria-hidden="true">✳</span><span id="summaryHeading">Case summary</span></div>
+          <p id="caseSummary"></p>
+          <div id="fileIssues" class="file-issues" hidden></div>
+        </section>
+
+        <div class="analysis-columns">
+          <section class="timeline-section" aria-labelledby="timelineHeading">
+            <div class="section-heading"><div><p class="section-kicker">What the files show</p><h2 id="timelineHeading">Evidence timeline</h2></div><span id="eventCount" class="count-badge"></span></div>
+            <div id="timeline" class="timeline"></div>
+          </section>
+          <aside class="evidence-aside">
+            <section class="aside-card missing-card" aria-labelledby="missingHeading">
+              <div class="aside-heading"><span class="aside-icon missing-icon" aria-hidden="true">?</span><div><p class="section-kicker">Still to verify</p><h2 id="missingHeading">Missing evidence</h2></div></div>
+              <div id="missingList"></div>
+            </section>
+            <section class="aside-card contradictions-card" aria-labelledby="contradictionHeading">
+              <div class="aside-heading"><span class="aside-icon conflict-icon" aria-hidden="true">↔</span><div><p class="section-kicker">Compare across files</p><h2 id="contradictionHeading">Contradictions</h2></div></div>
+              <div id="contradictionList"></div>
+            </section>
+            <section class="source-list-card" aria-labelledby="sourcesHeading">
+              <div class="source-list-heading"><div><p class="section-kicker">Available to inspect</p><h2 id="sourcesHeading">Original evidence</h2></div><span class="source-count">5 files</span></div>
+              <div id="sourceList" class="source-list"></div>
+            </section>
+          </aside>
+        </div>
+        <div class="analysis-disclaimer">ProofPath organizes the submitted records. It does not determine who is right, provide legal advice, or establish legal truth.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><span>ProofPath <span aria-hidden="true">·</span> Evidence, in order.</span><span>Demo evidence is fictional and synthetic.</span></footer>
+</body>
+</html>
