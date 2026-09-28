@@ -50,14 +50,16 @@ Build mode: fast
 
 ## Code Tour and App Map
 
-- [ ] Learning activity complete — guided route, focused alternative, prior practice connected, or brief recap
-- [ ] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
-- [ ] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
+- [x] Learning activity complete — brief evidence-based recap connected the user’s plan-first goal to the supported-evidence rule, its validator, and tests.
+- [x] Optional edit and transfer reflection addressed — no extra edit or reflection prompt added, honoring the user’s request to avoid optional pauses.
+- [x] `devpost/app-map.html` generated from finished code and checked; its reference route is explicitly labeled as not toured interactively.
 
-Activity and evidence: [what actually happened; real document/test/code references; unfinished work if interrupted]
-Route and stops: [actual paths and symbols; guided stops completed, or reference-only route]
-Edit outcome: [tried/kept/reverted/declined/not applicable; verification if changed]
-Reflection: [offered/answered/declined/already covered — personal answer belongs only in the ignored profile]
-Activity mode: [live app and editor, explicit static fallback, focused alternative, prior practice, or recap]
+Activity and evidence: Brief recap based on the user’s plan-first learning goal; linked the direct-support acceptance criterion to `server.mjs > validateAnalysis()` and paired pass/fail cases in `test/server.test.mjs`. User completed the final app review and reported all core flows clear with no blocking issues.
+Route and stops: Reference-only route in `devpost/app-map.html`: `public/app.js > acceptSelectedFiles()` → `server.mjs > handleAnalyze()/prepareFiles()/callGemini()/validateAnalysis()` → `public/app.js > renderAnalysis()/renderReport()`. No interactive source tour is claimed.
+Edit outcome: Not applicable; no optional code edit made.
+Reflection: Already covered by the user’s stated plan-first learning outcome; no additional personal reflection requested.
+Activity mode: Brief evidence-based recap and offline reference map.
 
 ## Revisions
+
+- Verification note: A live five-file Gemini analysis and one-file upload succeeded during the build, and partial analysis correctly flagged a damaged image while analyzing the readable record. A final repeat later received upstream HTTP 503; ProofPath returned its retryable `AI_UNAVAILABLE` state without rendering fabricated analysis. This is an external service availability limitation, not a scope or architecture change.
