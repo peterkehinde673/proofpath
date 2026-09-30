@@ -61,3 +61,24 @@ test('rejects an event with an invalid date instead of guessing one', () => {
   const event = { ...sample().events[0], date: 'June 18' };
   assert.throws(() => validateAnalysis(sample({ events: [event] }), files), /ISO format or empty/);
 });
+
+test('rejects duplicate event IDs', () => {
+  const events = [
+    sample().events[0],
+    { ...sample().events[0], event: 'Order confirmed' },
+  ];
+  assert.throws(() => validateAnalysis(sample({ events }), files), /Event IDs must be unique/);
+});
+
+test('rejects a missing event that cites evidence', () => {
+  const event = { ...sample().events[0], status: 'missing' };
+  assert.throws(() => validateAnalysis(sample({ events: [event] }), files), /missing event cannot claim a supporting source/);
+});
+
+test('rejects analysis when every submitted file is unavailable', () => {
+  const analysis = sample({ fileIssues: [
+    { fileId: 'payment', reason: 'Unreadable file' },
+    { fileId: 'seller', reason: 'Unreadable file' },
+  ]});
+  assert.throws(() => validateAnalysis(analysis, files), /No readable evidence remains/);
+});
