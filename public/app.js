@@ -305,6 +305,7 @@ async function runAnalysis() {
   if (!readableFiles.length || state.busy && elements.processing.hidden) return;
   setBusy(true);
   elements.processing.hidden = false;
+  elements.processing.setAttribute('aria-busy', 'true');
   elements.error.hidden = true;
   elements.content.hidden = true;
   try {
@@ -323,10 +324,12 @@ async function runAnalysis() {
     state.analysis = { ...payload.analysis, fileIssues: [...(payload.analysis.fileIssues || []), ...localIssues] };
     updateAnalysisContext();
     renderAnalysis(state.analysis);
+    elements.analysis.querySelector('#analysisTitle')?.focus();
   } catch {
     showError('ProofPath could not reach the local analysis service. Your selected files are still here; retry when the server is available.', 'Analysis service unavailable');
   } finally {
     elements.processing.hidden = true;
+    elements.processing.setAttribute('aria-busy', 'false');
     setBusy(false);
   }
 }
