@@ -134,6 +134,7 @@ proofpath/
 ├── .env.example             # Local key template
 ├── .gitignore
 ├── LICENSE
+├── SECURITY.md
 └── README.md
 ```
 
