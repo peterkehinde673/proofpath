@@ -24,7 +24,7 @@ The important design rule is simple: a result should point back to the evidence 
 - A Gemini API key from Google AI Studio
 - Network access to the Gemini API
 
-Node.js 22.21.0 is used because ProofPath relies on Node's stable `--env-file-if-exists` support. citeturn1search0
+Node.js 22.21.0 is used because ProofPath relies on Node's stable `--env-file-if-exists` support.
 
 ### Setup
 
@@ -185,4 +185,4 @@ MIT License. See [LICENSE](LICENSE).
 
 ## Repository
 
-urlProofPath on GitHubhttps://github.com/peterkehinde673/proofpath
+https://github.com/peterkehinde673/proofpath
