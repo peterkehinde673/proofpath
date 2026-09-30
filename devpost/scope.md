@@ -17,10 +17,10 @@ An everyday consumer trying to organize records from an online purchase or servi
 The consumer uploads a small set of records—or opens the fictional demo packet—then reviews an AI-generated timeline, evidence status, gaps or inconsistencies, and a human-readable report.
 
 ## Inspiration & Identity
-Not established yet. The interface should make a complicated evidence packet feel clear and understandable; `3-prd` can establish the concrete visual direction.
+ProofPath is built around a simple product principle: evidence should remain traceable as it becomes a story. Its identity is a calm, source-first workspace that makes complicated records easier to follow without pretending that AI can replace human verification.
 
-## Why This Matters to the Learner
-The learner wants to practice a plan-first workflow while making a polished, quickly demonstrable proof of concept. Personal motivation beyond that is not established.
+## Learning Goal
+The project uses a plan-first workflow to practice turning a narrow product idea into a testable AI experience. The implementation deliberately favors a small end-to-end system over a larger feature set.
 
 ## What "Working" Looks Like
 In a short screen demo, the user opens the fictional online-purchase packet—seller conversation, payment confirmation, order receipt, promised delivery date, and follow-up conversation without clear delivery confirmation—and gets an understandable chronological evidence package. The key moment is seeing the timeline connect events to their sources and point out the unconfirmed delivery and what proof would help.
