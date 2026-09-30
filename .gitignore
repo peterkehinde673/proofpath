@@ -16,3 +16,7 @@ npm-debug.log*
 /agent/
 /skills-lock.json
 /codex-session-*.md
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
