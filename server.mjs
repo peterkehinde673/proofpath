@@ -13,6 +13,15 @@ const MAX_TOTAL_BYTES = 10 * 1024 * 1024;
 const MAX_BODY_BYTES = 15 * 1024 * 1024;
 const API_TIMEOUT_MS = 90_000;
 
+const SECURITY_HEADERS = {
+  'content-security-policy': "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' blob: data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
+  'cross-origin-opener-policy': 'same-origin',
+  'permissions-policy': 'camera=(), geolocation=(), microphone=(), payment=()',
+  'referrer-policy': 'no-referrer',
+  'x-content-type-options': 'nosniff',
+  'x-frame-options': 'DENY',
+};
+
 const FILE_TYPES = {
   '.txt': 'text/plain',
   '.pdf': 'application/pdf',
@@ -406,9 +415,9 @@ async function callGemini(files) {
 
 function json(response, status, body) {
   response.writeHead(status, {
+    ...SECURITY_HEADERS,
     'content-type': 'application/json; charset=utf-8',
     'cache-control': 'no-store',
-    'x-content-type-options': 'nosniff',
   });
   response.end(JSON.stringify(body));
 }
@@ -464,10 +473,10 @@ async function serveStatic(request, response, pathname) {
     const fileInfo = await stat(target);
     if (!fileInfo.isFile()) throw new Error('Not a file');
     response.writeHead(200, {
+      ...SECURITY_HEADERS,
       'content-type': mimeForStaticFile(target),
       'content-length': fileInfo.size,
       'cache-control': 'no-store',
-      'x-content-type-options': 'nosniff',
     });
     if (request.method === 'HEAD') response.end();
     else createReadStream(target).pipe(response);
