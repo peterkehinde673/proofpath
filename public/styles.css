@@ -271,3 +271,13 @@ h1 { margin: 0; color: var(--ink); font-size: clamp(2.6rem, 5.1vw, 4.65rem); fon
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+
+@media print {
+  body { background: #fff; }
+  .topbar, .site-footer, .back-button, .analysis-actions, .analysis-disclaimer { display: none !important; }
+  .report-view { width: 100%; padding: 0; }
+  .report-sheet { border: 0; box-shadow: none; padding: 0; }
+  .report-section, .report-event, .report-gap, .report-scope-note { break-inside: avoid; }
+  .report-event { page-break-inside: avoid; }
+}
