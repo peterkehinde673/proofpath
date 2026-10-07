@@ -302,14 +302,21 @@ function prepareFiles(files) {
 
     if (!name || name !== candidate.name || name.length > 180) reason = 'Invalid filename';
     else if (!expectedMime) reason = 'Unsupported format';
-    else if (!MIME_BY_EXT[extension].has(candidateMime)) reason = 'File type does not match its extension';
     else if (extension === '.txt' && typeof candidate.text === 'string') {
+      // Mobile file pickers can report an empty or generic MIME type. For plain
+      // text, the decoded contents are the authoritative representation.
       text = candidate.text;
       bytes = Buffer.from(text, 'utf8');
     } else if (typeof candidate.base64 === 'string' && /^[A-Za-z0-9+/]*={0,2}$/.test(candidate.base64)) {
       base64 = candidate.base64;
       bytes = Buffer.from(base64, 'base64');
     } else reason = 'Could not read file contents';
+
+    if (!reason && extension !== '.txt' && candidateMime && !MIME_BY_EXT[extension].has(candidateMime)) {
+      // Do not reject a readable PDF/image solely because a mobile browser
+      // supplied a generic MIME type; validate the actual file signature below.
+      if (candidateMime !== 'application/octet-stream') reason = 'File type does not match its extension';
+    }
 
     if (!reason && bytes.byteLength > MAX_FILE_BYTES) reason = 'File exceeds the 2 MB per-file limit';
     if (!reason && total + bytes.byteLength > MAX_TOTAL_BYTES) reason = 'File exceeds the 10 MB total selection limit';
