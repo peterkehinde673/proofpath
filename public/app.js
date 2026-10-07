@@ -218,7 +218,7 @@ async function acceptSelectedFiles(fileList) {
     let issue = null;
     if (file.name.length > 180) issue = 'Filename is too long';
     else if (!FILE_MIME[extension]) issue = 'Unsupported format';
-    else if (file.type && file.type !== FILE_MIME[extension] && file.type !== 'application/octet-stream') issue = 'File type does not match its extension';
+    else if (extension !== 'txt' && file.type && file.type !== FILE_MIME[extension] && file.type !== 'application/octet-stream') issue = 'File type does not match its extension';
     else if (file.size > MAX_FILE_BYTES) issue = 'File exceeds the 2 MB per-file limit';
     else if (total + file.size > MAX_TOTAL_BYTES) issue = 'File exceeds the 10 MB total selection limit';
 
@@ -255,7 +255,10 @@ function setUploadNotice(message) {
 function renderReviewFiles() {
   const count = state.files.length;
   if (!count) elements.uploadNotice.hidden = true;
-  elements.selectedCount.textContent = `${count} ${count === 1 ? 'file' : 'files'} selected`;
+  const readableCount = state.files.filter((file) => !file.issue).length;
+  elements.selectedCount.textContent = count
+    ? `${readableCount} of ${count} ${count === 1 ? 'file' : 'files'} ready`
+    : '0 files selected';
   elements.emptyUpload.hidden = count > 0;
   elements.reviewList.replaceChildren();
   for (const file of state.files) {
