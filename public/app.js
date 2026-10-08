@@ -198,30 +198,44 @@ function encodeBytesBase64(bytes) {
   return btoa(binary);
 }
 
-function readTextFile(file) {
-  return new Promise((resolve, reject) => {
-    if (typeof file.text === 'function') {
-      file.text().then((text) => {
-        if (text || file.size === 0) resolve(text);
-        else {
-          const reader = new FileReader();
-          reader.onload = () => resolve(typeof reader.result === 'string' ? reader.result : '');
-          reader.onerror = () => reject(reader.error || new Error('File could not be read'));
-          reader.readAsText(file, 'UTF-8');
-        }
-      }).catch(() => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(typeof reader.result === 'string' ? reader.result : '');
-        reader.onerror = () => reject(reader.error || new Error('File could not be read'));
-        reader.readAsText(file, 'UTF-8');
-      });
-      return;
+async function readTextFile(file) {
+  const failures = [];
+
+  try {
+    if (typeof file.arrayBuffer === 'function') {
+      const buffer = await file.arrayBuffer();
+      const bytes = new Uint8Array(buffer);
+      const text = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+      return { text, method: 'arrayBuffer' };
     }
-    const reader = new FileReader();
-    reader.onload = () => resolve(typeof reader.result === 'string' ? reader.result : '');
-    reader.onerror = () => reject(reader.error || new Error('File could not be read'));
-    reader.readAsText(file, 'UTF-8');
-  });
+  } catch (error) {
+    failures.push(error?.message || error?.name || 'arrayBuffer failed');
+  }
+
+  try {
+    if (typeof file.text === 'function') {
+      const text = await file.text();
+      if (text || file.size === 0) return { text, method: 'blob.text' };
+      failures.push('Blob.text returned empty content');
+    }
+  } catch (error) {
+    failures.push(error?.message || error?.name || 'Blob.text failed');
+  }
+
+  try {
+    const result = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(typeof reader.result === 'string' ? reader.result : '');
+      reader.onerror = () => reject(reader.error || new Error('FileReader failed'));
+      reader.readAsText(file, 'UTF-8');
+    });
+    if (result || file.size === 0) return { text: result, method: 'FileReader' };
+    failures.push('FileReader returned empty content');
+  } catch (error) {
+    failures.push(error?.message || error?.name || 'FileReader failed');
+  }
+
+  throw new Error('Could not read ' + file.name + ' (' + file.size + ' bytes): ' + (failures.join('; ') || 'unknown read error'));
 }
 
 async function acceptSelectedFiles(fileList) {
@@ -259,14 +273,16 @@ async function acceptSelectedFiles(fileList) {
     if (!issue) {
       try {
         if (extension === 'txt') {
-          entry.text = await readTextFile(file);
+          const result = await readTextFile(file);
+          entry.text = result.text;
+          entry.readMethod = result.method;
           if (!entry.text.trim() && file.size > 0) throw new Error('Text file was empty or unreadable');
         } else {
           const bytes = new Uint8Array(await file.arrayBuffer());
           entry.base64 = encodeBytesBase64(bytes);
         }
-      } catch {
-        entry.issue = 'Unreadable file';
+      } catch (error) {
+        entry.issue = error?.message || 'Unreadable file';
       }
     }
     state.files.push(entry);
