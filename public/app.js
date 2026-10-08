@@ -253,7 +253,7 @@ async function acceptSelectedFiles(fileList) {
 
   let total = state.files.reduce((sum, file) => sum + file.size, 0);
   for (const file of selected) {
-    const id = `upload-${crypto.randomUUID()}`;
+    const id = `upload-${crypto.randomUUID().replaceAll('-', '').slice(0, 32)}`;
     const extension = file.name.split('.').at(-1)?.toLowerCase() || '';
     let issue = null;
     if (file.name.length > 180) issue = 'Filename is too long';
