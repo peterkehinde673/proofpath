@@ -251,7 +251,7 @@ async function readJson(request) {
 }
 
 function validId(value) {
-  return typeof value === 'string' && /^[a-zA-Z0-9_-]{1,40}$/.test(value);
+  return typeof value === 'string' && /^[a-zA-Z0-9_-]{1,64}$/.test(value);
 }
 
 function signatureIssue(extension, bytes) {
