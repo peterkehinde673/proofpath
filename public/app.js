@@ -232,9 +232,14 @@ async function acceptSelectedFiles(fileList) {
     };
     if (!issue) {
       try {
-        const bytes = new Uint8Array(await file.arrayBuffer());
-        if (extension === 'txt') entry.text = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
-        else entry.base64 = encodeBytesBase64(bytes);
+        if (extension === 'txt') {
+          // Some mobile file providers expose selected text files more reliably
+          // through File.text() than through File.arrayBuffer().
+          entry.text = await file.text();
+        } else {
+          const bytes = new Uint8Array(await file.arrayBuffer());
+          entry.base64 = encodeBytesBase64(bytes);
+        }
       } catch {
         entry.issue = 'Unreadable file';
       }
