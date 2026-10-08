@@ -198,6 +198,32 @@ function encodeBytesBase64(bytes) {
   return btoa(binary);
 }
 
+function readTextFile(file) {
+  return new Promise((resolve, reject) => {
+    if (typeof file.text === 'function') {
+      file.text().then((text) => {
+        if (text || file.size === 0) resolve(text);
+        else {
+          const reader = new FileReader();
+          reader.onload = () => resolve(typeof reader.result === 'string' ? reader.result : '');
+          reader.onerror = () => reject(reader.error || new Error('File could not be read'));
+          reader.readAsText(file, 'UTF-8');
+        }
+      }).catch(() => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(typeof reader.result === 'string' ? reader.result : '');
+        reader.onerror = () => reject(reader.error || new Error('File could not be read'));
+        reader.readAsText(file, 'UTF-8');
+      });
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => resolve(typeof reader.result === 'string' ? reader.result : '');
+    reader.onerror = () => reject(reader.error || new Error('File could not be read'));
+    reader.readAsText(file, 'UTF-8');
+  });
+}
+
 async function acceptSelectedFiles(fileList) {
   const incoming = [...fileList];
   elements.uploadNotice.hidden = true;
@@ -233,9 +259,8 @@ async function acceptSelectedFiles(fileList) {
     if (!issue) {
       try {
         if (extension === 'txt') {
-          // Some mobile file providers expose selected text files more reliably
-          // through File.text() than through File.arrayBuffer().
-          entry.text = await file.text();
+          entry.text = await readTextFile(file);
+          if (!entry.text.trim() && file.size > 0) throw new Error('Text file was empty or unreadable');
         } else {
           const bytes = new Uint8Array(await file.arrayBuffer());
           entry.base64 = encodeBytesBase64(bytes);
